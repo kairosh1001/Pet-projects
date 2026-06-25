@@ -1,0 +1,38 @@
+{
+  "feature_columns": [
+    "ceiling_height",
+    "year_of_construction",
+    "district",
+    "residential_complex",
+    "furnished",
+    "apartment_condition",
+    "building_type",
+    "rooms",
+    "current_floor",
+    "total_floors",
+    "area_m2",
+    "h3_res_7",
+    "h3_res_8",
+    "h3_res_9",
+    "dist_to_nearest_mall_km",
+    "dist_to_nearest_park_km",
+    "dist_to_nearest_lrt_km",
+    "dist_to_baiterek_km",
+    "dist_to_botgarden_km",
+    "dist_to_mangilikel_km",
+    "dist_to_khanshatyr_km",
+    "dist_to_expo_km",
+    "floor_ratio"
+  ],
+  "categorical_features": [
+    "district",
+    "residential_complex",
+    "furnished",
+    "apartment_condition",
+    "building_type",
+    "h3_res_7",
+    "h3_res_8",
+    "h3_res_9"
+  ],
+  "target": "price_per_m2_log"
+}
