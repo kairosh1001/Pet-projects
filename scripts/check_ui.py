@@ -124,6 +124,7 @@ def main() -> None:
         "Выгода q50",
         "Подробнее",
         "/predict?url=",
+        "2026-06-29 05:00",
     ]:
         assert_contains(undervalued.text, needle)
 
@@ -136,6 +137,8 @@ def main() -> None:
         "завершено",
         "Найдено URL",
         "Обработано",
+        "Начато (Астана)",
+        "2026-06-29 05:05",
     ]:
         assert_contains(refresh_runs.text, needle)
 

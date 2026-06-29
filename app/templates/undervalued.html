@@ -19,7 +19,7 @@
         <th>q90/м2, тг</th>
         <th>Выгода q10</th>
         <th>Выгода q50</th>
-        <th>Последний раз найдено</th>
+        <th>Последний раз найдено (Астана)</th>
         <th>Детали</th>
       </tr>
     </thead>
@@ -34,7 +34,7 @@
         <td>{{ "{:,.0f}".format(item.pred_price_per_m2_q90) }}</td>
         <td>{{ "{:.2%}".format(item.discount_vs_asking_pct_conservative) }}</td>
         <td>{{ "{:.2%}".format(item.discount_vs_asking_pct_median) }}</td>
-        <td>{{ item.last_seen_at }}</td>
+        <td>{{ item.last_seen_at | astana_time }}</td>
         <td><a class="link-button" href="/predict?url={{ item.url | urlencode }}">Подробнее</a></td>
       </tr>
       {% endfor %}

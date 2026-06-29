@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from datetime import datetime, timedelta, timezone
 import os
 from pathlib import Path
 
@@ -15,7 +16,9 @@ from app.refresh_service import run_refresh
 
 
 ROOT = Path(os.getenv("APP_ROOT", Path(__file__).resolve().parents[1]))
+ASTANA_TZ = timezone(timedelta(hours=5), name="Asia/Astana")
 templates = Jinja2Templates(directory=str(ROOT / "app" / "templates"))
+templates.env.filters["astana_time"] = lambda value: format_astana_time(value)
 
 app = FastAPI(title="Оценка объявлений Krisha")
 prediction_service = PredictionService(ROOT)
@@ -319,3 +322,18 @@ def _validate_refresh_options(
         raise ValueError("Паузы между запросами не могут быть отрицательными.")
     if max_delay < min_delay:
         raise ValueError("Максимальная пауза не может быть меньше минимальной.")
+
+
+def format_astana_time(value: object) -> str:
+    if not value:
+        return "-"
+
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return str(value)
+
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+
+    return parsed.astimezone(ASTANA_TZ).strftime("%Y-%m-%d %H:%M")

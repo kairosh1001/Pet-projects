@@ -18,8 +18,8 @@
         <th>Найдено URL</th>
         <th>Обработано</th>
         <th>Ошибок</th>
-        <th>Начато</th>
-        <th>Завершено</th>
+        <th>Начато (Астана)</th>
+        <th>Завершено (Астана)</th>
         <th>Ошибка</th>
       </tr>
     </thead>
@@ -43,8 +43,8 @@
         <td>{{ item.urls_seen }}</td>
         <td>{{ item.listings_processed }}</td>
         <td>{{ item.listings_failed }}</td>
-        <td>{{ item.started_at }}</td>
-        <td>{{ item.finished_at or "-" }}</td>
+        <td>{{ item.started_at | astana_time }}</td>
+        <td>{{ item.finished_at | astana_time }}</td>
         <td>{{ item.error or "-" }}</td>
       </tr>
       {% endfor %}
