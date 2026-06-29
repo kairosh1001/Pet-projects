@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Статус сервиса</h1>
+<section class="panel">
+  <dl>
+    <dt>Всего объявлений в базе</dt>
+    <dd>{{ summary.total_listings or 0 }}</dd>
+    <dt>Активных объявлений</dt>
+    <dd>{{ summary.active_listings or 0 }}</dd>
+    <dt>Устаревших объявлений</dt>
+    <dd>{{ summary.stale_listings or 0 }}</dd>
+    <dt>Квартир ниже рынка</dt>
+    <dd>{{ summary.below_market_active or 0 }}</dd>
+  </dl>
+</section>
+
+<h2>Последнее обновление</h2>
+<section class="panel">
+  {% if not summary.latest_refresh %}
+  <p>Обновлений пока не было.</p>
+  {% else %}
+  {% set refresh = summary.latest_refresh %}
+  <dl>
+    <dt>ID</dt>
+    <dd>{{ refresh.id }}</dd>
+    <dt>Тип</dt>
+    <dd>
+      {% if refresh.kind == "daily" %}ежедневное
+      {% elif refresh.kind == "weekly" %}еженедельное
+      {% elif refresh.kind == "manual" %}ручное
+      {% else %}{{ refresh.kind }}{% endif %}
+    </dd>
+    <dt>Статус</dt>
+    <dd>
+      {% if refresh.status == "completed" %}завершено
+      {% elif refresh.status == "running" %}выполняется
+      {% elif refresh.status == "failed" %}ошибка
+      {% else %}{{ refresh.status }}{% endif %}
+    </dd>
+    <dt>Начато (Астана)</dt>
+    <dd>{{ refresh.started_at | astana_time }}</dd>
+    <dt>Завершено (Астана)</dt>
+    <dd>{{ refresh.finished_at | astana_time }}</dd>
+    <dt>Страницы</dt>
+    <dd>{{ refresh.start_page }}-{{ refresh.end_page }} / {{ refresh.pages_seen }}</dd>
+    <dt>Найдено URL</dt>
+    <dd>{{ refresh.urls_seen }}</dd>
+    <dt>Обработано</dt>
+    <dd>{{ refresh.listings_processed }}</dd>
+    <dt>Ошибок</dt>
+    <dd>{{ refresh.listings_failed }}</dd>
+    <dt>Ошибка</dt>
+    <dd>{{ refresh.error or "-" }}</dd>
+  </dl>
+  {% endif %}
+</section>
+
+<p><a class="button" href="/refresh-runs-page">История обновлений</a></p>
+<p><a class="button" href="/">Назад</a></p>
+{% endblock %}

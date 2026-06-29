@@ -259,6 +259,7 @@ Initial pages:
 - Home page with one listing URL input.
 - Prediction result page.
 - Undervalued listings page.
+- Service status page.
 - Refresh history page.
 - Admin refresh page protected by `ADMIN_TOKEN`.
 

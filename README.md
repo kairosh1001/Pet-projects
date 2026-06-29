@@ -44,6 +44,7 @@ Useful pages:
 
 ```text
 http://127.0.0.1:8000/undervalued-page
+http://127.0.0.1:8000/status-page
 http://127.0.0.1:8000/refresh-runs-page
 http://127.0.0.1:8000/admin-refresh-page
 ```

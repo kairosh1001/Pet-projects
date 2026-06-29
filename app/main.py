@@ -10,7 +10,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
-from app.database import connect, fetch_refresh_runs, fetch_undervalued, init_db
+from app.database import (
+    connect,
+    fetch_refresh_runs,
+    fetch_status_summary,
+    fetch_undervalued,
+    init_db,
+)
 from app.prediction_service import PredictionService
 from app.refresh_service import run_refresh
 
@@ -149,6 +155,24 @@ def refresh_runs(limit: int = 20) -> dict:
     return {
         "items": runs,
     }
+
+
+@app.get("/status-summary")
+def status_summary() -> dict:
+    with connect(DB_PATH) as db_connection:
+        summary = fetch_status_summary(db_connection)
+    return summary
+
+
+@app.get("/status-page", response_class=HTMLResponse)
+def status_page(request: Request) -> HTMLResponse:
+    with connect(DB_PATH) as db_connection:
+        summary = fetch_status_summary(db_connection)
+    return templates.TemplateResponse(
+        request,
+        "status.html",
+        {"request": request, "summary": summary},
+    )
 
 
 @app.get("/refresh-runs-page", response_class=HTMLResponse)

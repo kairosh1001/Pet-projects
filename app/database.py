@@ -271,6 +271,49 @@ def fetch_refresh_runs(
     return [dict(row) for row in rows]
 
 
+def fetch_status_summary(connection: sqlite3.Connection) -> dict:
+    listing_counts = connection.execute(
+        """
+        SELECT
+            COUNT(*) AS total_listings,
+            SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) AS active_listings,
+            SUM(CASE WHEN status = 'stale' THEN 1 ELSE 0 END) AS stale_listings,
+            SUM(
+                CASE
+                    WHEN status = 'active'
+                     AND discount_vs_asking_pct_conservative > 0
+                    THEN 1 ELSE 0
+                END
+            ) AS below_market_active
+        FROM listings
+        """
+    ).fetchone()
+    latest_refresh = connection.execute(
+        """
+        SELECT
+            id,
+            started_at,
+            finished_at,
+            kind,
+            start_page,
+            end_page,
+            pages_seen,
+            urls_seen,
+            listings_processed,
+            listings_failed,
+            status,
+            error
+        FROM refresh_runs
+        ORDER BY id DESC
+        LIMIT 1
+        """
+    ).fetchone()
+
+    summary = dict(listing_counts)
+    summary["latest_refresh"] = dict(latest_refresh) if latest_refresh else None
+    return summary
+
+
 def iter_unique_urls(urls: Iterable[str]) -> list[str]:
     seen = set()
     result = []

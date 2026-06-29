@@ -65,6 +65,7 @@ docker compose --profile tools run --rm refresh \
 
 ```text
 http://SERVER_IP:8000
+http://SERVER_IP:8000/status-page
 http://SERVER_IP:8000/refresh-runs-page
 http://SERVER_IP:8000/undervalued-page
 ```

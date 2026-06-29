@@ -103,6 +103,7 @@ def main() -> None:
     if home.status_code != 200:
         raise SystemExit(f"Home page returned {home.status_code}")
     assert_contains(home.text, "Квартиры ниже рынка")
+    assert_contains(home.text, "Статус сервиса")
     assert_contains(home.text, "История обновлений")
     assert_contains(home.text, "Админ: обновить данные")
 
@@ -141,6 +142,18 @@ def main() -> None:
         "2026-06-29 05:05",
     ]:
         assert_contains(refresh_runs.text, needle)
+
+    status_page = client.get("/status-page")
+    if status_page.status_code != 200:
+        raise SystemExit(f"Status page returned {status_page.status_code}")
+    for needle in [
+        "Статус сервиса",
+        "Всего объявлений в базе",
+        "Квартир ниже рынка",
+        "Последнее обновление",
+        "2026-06-29 05:05",
+    ]:
+        assert_contains(status_page.text, needle)
 
     admin_page = client.get("/admin-refresh-page")
     if admin_page.status_code != 200:
