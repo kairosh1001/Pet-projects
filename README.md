@@ -1,5 +1,7 @@
 # Krisha Listing Valuation
 
+[![CI](https://github.com/kairosh1001/Pet-projects/actions/workflows/ci.yml/badge.svg)](https://github.com/kairosh1001/Pet-projects/actions/workflows/ci.yml)
+
 CatBoost-based valuation service for Astana apartment listings from krisha.kz.
 
 ## Local Setup
