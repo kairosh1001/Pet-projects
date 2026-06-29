@@ -10,6 +10,68 @@ This is the intended low-cost v1 deployment path:
 6. Add cron jobs for daily and weekly refreshes.
 7. Add Caddy/HTTPS after the app works by server IP.
 
+## VPS Checklist
+
+Use this order when deploying for the first time:
+
+1. Buy the VPS and SSH into it.
+2. Install Docker and the Docker Compose plugin.
+3. Clone the repo:
+
+```bash
+git clone https://github.com/kairosh1001/Pet-projects.git /opt/krisha
+cd /opt/krisha
+```
+
+4. Create environment config:
+
+```bash
+cp .env.example .env
+nano .env
+```
+
+Set at least:
+
+```text
+ADMIN_TOKEN=replace-with-a-private-token
+APP_PORT=8000
+DB_PATH=/app/data/krisha.sqlite3
+```
+
+5. Build and start:
+
+```bash
+docker compose build
+docker compose up -d app
+docker compose ps
+```
+
+6. Verify the app:
+
+```bash
+curl http://127.0.0.1:8000/health
+docker compose run --rm app python scripts/check_deployment.py
+docker compose run --rm app python scripts/check_ui.py
+```
+
+7. Run a tiny scrape smoke test:
+
+```bash
+docker compose --profile tools run --rm refresh \
+  python scripts/refresh_listings.py --kind manual --pages 1 --max-listings 3 --min-delay 0 --max-delay 0
+```
+
+8. Check the browser pages:
+
+```text
+http://SERVER_IP:8000
+http://SERVER_IP:8000/refresh-runs-page
+http://SERVER_IP:8000/undervalued-page
+```
+
+9. Add cron only after the smoke test succeeds.
+10. Add a domain and HTTPS only after the IP-based app works.
+
 ## First Server Run
 
 From the repository directory:
