@@ -1,4 +1,8 @@
 catboost_info/
+data/*.sqlite3
+data/*.sqlite3-*
+logs/
+.Rhistory
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

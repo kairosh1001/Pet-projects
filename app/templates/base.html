@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Оценка объявлений Krisha</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+        color: #1f2933;
+        background: #f7f8fa;
+      }
+      body {
+        margin: 0;
+      }
+      main {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 32px 18px;
+      }
+      h1 {
+        margin: 0 0 18px;
+        font-size: 28px;
+      }
+      h2 {
+        font-size: 18px;
+        margin: 28px 0 12px;
+      }
+      form {
+        display: flex;
+        gap: 10px;
+        margin: 18px 0;
+      }
+      input {
+        flex: 1;
+        min-width: 0;
+        padding: 11px 12px;
+        border: 1px solid #b8c0cc;
+        border-radius: 6px;
+        font-size: 15px;
+      }
+      button, .button {
+        border: 0;
+        border-radius: 6px;
+        background: #1769aa;
+        color: white;
+        padding: 11px 15px;
+        font-size: 15px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .panel {
+        background: white;
+        border: 1px solid #d9dee7;
+        border-radius: 8px;
+        padding: 18px;
+      }
+      .error {
+        color: #9f1d1d;
+        background: #fff1f1;
+        border: 1px solid #f1b8b8;
+        padding: 12px;
+        border-radius: 6px;
+      }
+      dl {
+        display: grid;
+        grid-template-columns: minmax(170px, 240px) 1fr;
+        gap: 10px 18px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      th, td {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 10px 8px;
+        text-align: left;
+        vertical-align: top;
+        white-space: nowrap;
+      }
+      th {
+        color: #52606d;
+      }
+      dt {
+        color: #52606d;
+      }
+      dd {
+        margin: 0;
+        font-weight: 600;
+      }
+      .link-button {
+        color: #1769aa;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      @media (max-width: 640px) {
+        form, dl {
+          display: block;
+        }
+        button, .button {
+          width: 100%;
+          margin-top: 10px;
+          display: block;
+          box-sizing: border-box;
+          text-align: center;
+        }
+        dd {
+          margin: 2px 0 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

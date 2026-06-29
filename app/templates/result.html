@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Результат оценки</h1>
+<section class="panel">
+  <h2>{{ prediction.title }}</h2>
+  <p><a href="{{ prediction.url }}" target="_blank" rel="noreferrer">Открыть объявление на Krisha</a></p>
+  <dl>
+    <dt>Цена в объявлении</dt>
+    <dd>{{ "{:,.0f}".format(prediction.listed_price) }} тг</dd>
+    <dt>Площадь</dt>
+    <dd>{{ "{:,.2f}".format(prediction.area_m2) }} м2</dd>
+    <dt>Цена за м2 в объявлении</dt>
+    <dd>{{ "{:,.0f}".format(prediction.listed_price_per_m2) }} тг</dd>
+    <dt>Модель q10 за м2</dt>
+    <dd>{{ "{:,.0f}".format(prediction.pred_price_per_m2_q10) }} тг</dd>
+    <dt>Модель q50 за м2</dt>
+    <dd>{{ "{:,.0f}".format(prediction.pred_price_per_m2_q50) }} тг</dd>
+    <dt>Модель q90 за м2</dt>
+    <dd>{{ "{:,.0f}".format(prediction.pred_price_per_m2_q90) }} тг</dd>
+    <dt>Модель q50 всего</dt>
+    <dd>{{ "{:,.0f}".format(prediction.pred_total_q50) }} тг</dd>
+    <dt>Выгода q10 к цене</dt>
+    <dd>{{ "{:.2%}".format(prediction.discount_vs_asking_pct_conservative) }}</dd>
+    <dt>Выгода q50 к цене</dt>
+    <dd>{{ "{:.2%}".format(prediction.discount_vs_asking_pct_median) }}</dd>
+    <dt>Ширина интервала</dt>
+    <dd>{{ "{:.2%}".format(prediction.interval_width_pct) }}</dd>
+  </dl>
+</section>
+<p><a class="button" href="/">Проверить другое объявление</a></p>
+{% endblock %}

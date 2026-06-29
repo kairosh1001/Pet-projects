@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Оценка квартиры на Krisha</h1>
+<section class="panel">
+  <form method="post" action="/predict">
+    <input
+      name="url"
+      type="url"
+      value="{{ url }}"
+      placeholder="Ссылка на объявление Krisha.kz"
+      required
+    >
+    <button type="submit">Оценить</button>
+  </form>
+  {% if error %}
+  <p class="error">{{ error }}</p>
+  {% endif %}
+</section>
+<p><a href="/undervalued-page">Квартиры ниже рынка</a></p>
+{% endblock %}
