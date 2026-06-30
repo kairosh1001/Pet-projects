@@ -34,3 +34,9 @@ jobs:
 
       - name: UI smoke check
         run: python scripts/check_ui.py
+
+      - name: Docker Compose config check
+        run: docker compose config --quiet
+
+      - name: Docker Compose HTTPS profile check
+        run: APP_DOMAIN=example.com docker compose --profile https config --quiet

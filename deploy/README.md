@@ -148,9 +148,55 @@ Replace `/opt/krisha` with the actual repository path.
 
 ## Caddy/HTTPS
 
-Use `deploy/Caddyfile.example` after a domain points to the VPS.
+Use the `https` Compose profile only after a real domain points to the VPS.
+The provider panel hostname is not enough by itself; you must own the domain and
+create a DNS `A` record pointing to the server IP.
 
 Without a domain, keep testing by IP and port first.
+
+DNS example:
+
+```text
+your-domain.kz  A  SERVER_IP
+```
+
+After DNS is ready, edit `.env`:
+
+```text
+APP_DOMAIN=your-domain.kz
+```
+
+Then start Caddy:
+
+```bash
+docker compose --profile https up -d app caddy
+docker compose ps
+docker compose logs --tail=100 caddy
+```
+
+Expected public URLs:
+
+```text
+https://your-domain.kz
+https://your-domain.kz/undervalued-page
+https://your-domain.kz/status-page
+```
+
+Internal pages still redirect to `/admin-login` and use `ADMIN_TOKEN` as the
+password.
+
+After HTTPS works, optionally bind the app port to localhost in `.env` so direct
+public access to `:8000` is no longer exposed:
+
+```text
+APP_PORT=127.0.0.1:8000
+```
+
+Then restart:
+
+```bash
+docker compose --profile https up -d app caddy
+```
 
 ## Runtime Data
 
