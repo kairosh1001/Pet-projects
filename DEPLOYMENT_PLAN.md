@@ -105,7 +105,7 @@ Components:
 - Scheduled scraping jobs.
 - Docker Compose for local and VPS deployment.
 - Simple admin token for API/cron refresh operations.
-- HTTP Basic auth for internal browser pages, using username `admin` and `ADMIN_TOKEN` as the password.
+- Admin login form for internal browser pages, using `ADMIN_TOKEN` as the password.
 
 ## Deployment Direction
 
@@ -262,7 +262,7 @@ Initial pages:
 - Undervalued listings page.
 - Service status page.
 - Refresh history page.
-- Internal service status, refresh history, and admin refresh pages protected by HTTP Basic auth.
+- Internal service status, refresh history, and admin refresh pages protected by the admin login session.
 
 The undervalued page should include:
 
@@ -289,7 +289,7 @@ The refresh history page should include:
 
 The admin refresh page should:
 
-- Require HTTP Basic auth with username `admin` and password `ADMIN_TOKEN`.
+- Require admin login with `ADMIN_TOKEN` as the password.
 - Allow a small manual refresh from the browser.
 - Let the admin choose refresh type, page range, request delay, and listing cap.
 - Link back to refresh history.

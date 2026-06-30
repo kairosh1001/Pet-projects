@@ -103,7 +103,6 @@ def main() -> None:
 
     main.run_refresh = fake_run_refresh
     client = TestClient(main.app)
-    admin_auth = ("admin", "test-token")
 
     home = client.get("/")
     if home.status_code != 200:
@@ -118,20 +117,40 @@ def main() -> None:
         raise SystemExit(f"Invalid URL check returned {invalid_url.status_code}")
     assert_contains(invalid_url.text, "Ссылка должна вести на krisha.kz")
 
-    for path in [
-        "/refresh-runs",
-        "/refresh-runs-page",
-        "/status-summary",
-        "/status-page",
-        "/admin-refresh-page",
-    ]:
+    for path in ["/refresh-runs", "/status-summary"]:
         response = client.get(path)
         if response.status_code != 401:
-            raise SystemExit(f"{path} without auth returned {response.status_code}")
+            raise SystemExit(f"{path} without login returned {response.status_code}")
 
-        response = client.get(path, auth=("admin", "wrong-token"))
-        if response.status_code != 401:
-            raise SystemExit(f"{path} with bad auth returned {response.status_code}")
+    for path in ["/refresh-runs-page", "/status-page", "/admin-refresh-page"]:
+        response = client.get(path, follow_redirects=False)
+        if response.status_code != 303:
+            raise SystemExit(f"{path} without login returned {response.status_code}")
+        if not response.headers["location"].startswith("/admin-login?next="):
+            raise SystemExit(f"{path} redirected to {response.headers['location']}")
+
+    login_page = client.get("/admin-login?next=/status-page")
+    if login_page.status_code != 200:
+        raise SystemExit(f"Admin login page returned {login_page.status_code}")
+    assert_contains(login_page.text, "Вход для администратора")
+
+    bad_login = client.post(
+        "/admin-login",
+        data={"password": "wrong-token", "next": "/status-page"},
+    )
+    if bad_login.status_code != 400:
+        raise SystemExit(f"Bad admin login returned {bad_login.status_code}")
+    assert_contains(bad_login.text, "Неверный пароль")
+
+    good_login = client.post(
+        "/admin-login",
+        data={"password": "test-token", "next": "/status-page"},
+        follow_redirects=False,
+    )
+    if good_login.status_code != 303:
+        raise SystemExit(f"Good admin login returned {good_login.status_code}")
+    if good_login.headers["location"] != "/status-page":
+        raise SystemExit(f"Good admin login redirected to {good_login.headers['location']}")
 
     undervalued = client.get("/undervalued-page")
     if undervalued.status_code != 200:
@@ -151,15 +170,15 @@ def main() -> None:
     ]:
         assert_contains(undervalued.text, needle)
 
-    refresh_runs_api = client.get("/refresh-runs", auth=admin_auth)
+    refresh_runs_api = client.get("/refresh-runs")
     if refresh_runs_api.status_code != 200:
         raise SystemExit(f"Refresh runs API returned {refresh_runs_api.status_code}")
 
-    status_api = client.get("/status-summary", auth=admin_auth)
+    status_api = client.get("/status-summary")
     if status_api.status_code != 200:
         raise SystemExit(f"Status API returned {status_api.status_code}")
 
-    refresh_runs = client.get("/refresh-runs-page", auth=admin_auth)
+    refresh_runs = client.get("/refresh-runs-page")
     if refresh_runs.status_code != 200:
         raise SystemExit(f"Refresh runs page returned {refresh_runs.status_code}")
     for needle in [
@@ -173,7 +192,7 @@ def main() -> None:
     ]:
         assert_contains(refresh_runs.text, needle)
 
-    status_page = client.get("/status-page", auth=admin_auth)
+    status_page = client.get("/status-page")
     if status_page.status_code != 200:
         raise SystemExit(f"Status page returned {status_page.status_code}")
     for needle in [
@@ -185,7 +204,7 @@ def main() -> None:
     ]:
         assert_contains(status_page.text, needle)
 
-    admin_page = client.get("/admin-refresh-page", auth=admin_auth)
+    admin_page = client.get("/admin-refresh-page")
     if admin_page.status_code != 200:
         raise SystemExit(f"Admin refresh page returned {admin_page.status_code}")
     assert_contains(admin_page.text, "Админ: обновить данные")
@@ -194,7 +213,6 @@ def main() -> None:
 
     bad_admin = client.post(
         "/admin-refresh",
-        auth=admin_auth,
         data={
             "kind": "manual",
             "start_page": 1,
@@ -213,7 +231,6 @@ def main() -> None:
 
     good_admin = client.post(
         "/admin-refresh",
-        auth=admin_auth,
         data={
             "kind": "manual",
             "start_page": 1,
