@@ -1,6 +1,10 @@
 # Caddy reads APP_DOMAIN from .env. Start it only after DNS points to the VPS.
 
+www.{$APP_DOMAIN} {
+	redir https://{$APP_DOMAIN}{uri} permanent
+}
+
 {$APP_DOMAIN} {
-    encode gzip
-    reverse_proxy app:8000
+	encode gzip
+	reverse_proxy app:8000
 }

@@ -182,6 +182,9 @@ https://your-domain.kz/undervalued-page
 https://your-domain.kz/status-page
 ```
 
+If `www.your-domain.kz` also has an `A` record pointing to the VPS, Caddy
+redirects it to the main domain without `www`.
+
 Internal pages still redirect to `/admin-login` and use `ADMIN_TOKEN` as the
 password.
 
